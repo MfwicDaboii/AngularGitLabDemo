@@ -24,7 +24,7 @@
     stage: build 
     image: trion/ng-cli:latest
     before_script: 
-        - npm i 
+        - npm ci 
   
     script: 
         - ng build
@@ -78,19 +78,19 @@
     tags:
     - docker
   
-# # Deze testen runnen asynschroon van elkaar
-test-unit_nr1:
-  stage: test
-   before_script:
-    - export CHROME_BIN=/usr/bin/google-chrome
-  script:
-    - npm run test --include='**/test/unit/example.spec.ts'
+# Deze testen runnen asynschroon van elkaar
+  test-unit_nr1:
+    stage: test
+      before_script:
+      - export CHROME_BIN=/usr/bin/google-chrome
+    script:
+      - npm run test --include='**/test/unit/example.spec.ts'
 
 
-# # Deze testen runnen asynschroon van elkaar
-test-unit_nr2:
-  stage: test
-   before_script:
-    - export CHROME_BIN=/usr/bin/google-chrome
-  script:
-    - npm run test --include='**/test/unit/example2.spec.ts'
+  # Deze testen runnen asynschroon van elkaar
+  test-unit_nr2:
+    stage: test
+    before_script:
+      - export CHROME_BIN=/usr/bin/google-chrome
+    script:
+      - npm run test --include='**/test/unit/example2.spec.ts'
