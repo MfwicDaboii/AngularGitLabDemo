@@ -29,7 +29,7 @@ build:
  
   script: 
       - ng build --prod
-      - ng test:ci 
+      - ng test --browsers=Headless --no-watch
   artifacts:
     expire_in: 1 day
     paths:
