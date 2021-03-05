@@ -2,6 +2,10 @@
 # https://hub.docker.com/r/library/node/tags/
 image: node:latest
 
+stages:
+  - build
+  - test
+
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
@@ -15,13 +19,16 @@ services:
 cache:
   paths:
     - node_modules/
+    - .npm
 
-test_async:
+# Deze testen runnen asynschroon van elkaar
+test-unit_nr1:
+  stage: test
   script:
-    - npm install
-    - node ./specs/start.js ./specs/async.spec.js
+    - ng test --include='**/test/unit/example.spec.ts'
 
-test_db:
+# Deze testen runnen asynschroon van elkaar
+test-unit_nr2:
+  stage: test
   script:
-    - npm install
-    - node ./specs/start.js ./specs/db-postgres.spec.js
+    - ng test --include='**/test/unit/example2.spec.ts'
