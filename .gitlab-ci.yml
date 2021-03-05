@@ -24,17 +24,17 @@ setup:
 
 #unit testen
 test:karma:
-stage: test
-image: trion/ng-cli-karma
-allow_failure: false
-script:
-- npm ci
-- ng test --progress false --watch false
-artifacts:
-reports:
-junit: report.xml
-tags:
-- docker
+  stage: test
+  image: trion/ng-cli-karma
+  allow_failure: false
+  script:
+    - npm ci
+    - ng test --progress false --watch false
+  artifacts:
+    reports:
+      junit: report.xml
+  tags:
+    - docker
 
 #end - 2 - end testen
 test:e2e:
