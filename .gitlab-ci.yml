@@ -35,13 +35,13 @@
     tags:
       - docker
 
-  # Voor alle testen uit te voeren
+  # Voor maar één file 
   test:karma:
     stage: test
     image: trion/ng-cli-karma:latest
     allow_failure: false
     script:
-    - npm run test --progress false --watch false
+    - npm run test --include='**/test/unit/example.spec.ts' --progress false --watch false
     tags:
     - docker
 
