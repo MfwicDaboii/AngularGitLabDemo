@@ -2,6 +2,9 @@
 # https://hub.docker.com/r/library/node/tags/
 image: node:latest
 
+variables:
+  CLI_VERSION: 6.2.1
+
 stages:
   - build
   - test
@@ -29,7 +32,6 @@ build:
  
   script: 
       - ng build --prod
-      - ng test --browsers=Headless --no-watch
   artifacts:
     expire_in: 1 day
     paths:
@@ -37,7 +39,15 @@ build:
   tags:
     - docker
 
-
+test:karma:
+  stage: test
+  image: trion/ng-cli-karma:${CLI_VERSION}
+  allow_failure: false
+  script:
+  - ng test --progress false --watch false
+  tags:
+  - docker
+  
 # Deze testen runnen asynschroon van elkaar
 test-unit_nr1:
   stage: test
