@@ -37,6 +37,16 @@ test-unit_nr2:
   script:
     - npm run test --include='**/test/unit/example2.spec.ts'
 
+javascript:
+  stage: test
+  script:
+    - karma start --reporters junit
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
+
 test:e2e:
   stage: test
   image: trion/ng-cli-e2e:latest
