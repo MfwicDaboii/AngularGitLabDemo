@@ -19,13 +19,17 @@ stages:
 cache:
   paths:
     - node_modules/
-    - .npm
 
 build:
- stage: build
- image: trion/ng-cli
- before_script:
-  - npm ci
+  stage: build 
+  image: svaseghi/node-chrome:v1 
+  before_script: 
+      - export CHROME_BIN=/usr/bin/google-chrome 
+      - npm ci 
+ 
+  script: 
+      - npm run build 
+      - npm run test:ci 
  script:
   - ng build --prod
  artifacts:
@@ -34,6 +38,8 @@ build:
    - dist/
  tags:
   - docker
+
+
 
 # Deze testen runnen asynschroon van elkaar
 test-unit_nr1:
