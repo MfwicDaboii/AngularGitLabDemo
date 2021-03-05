@@ -1,17 +1,9 @@
   # Official framework image. Look for the different tagged releases at:
   # https://hub.docker.com/r/library/node/tags/
-  image: node:latest
+image: node:latest
 
 variables:
     npm_config_cache: "$CI_PROJECT_DIR/.npm"
-
-  # Pick zero or more services to be used on all builds.
-  # Only needed when using a docker container to run your tests in.
-  # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
-  # services:
-  #   - mysql:latest
-  #   - redis:latest
-  #   - postgres:latest
 
   # This folder is cached between builds
   # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
@@ -21,21 +13,15 @@ cache:
       - .npm
 
 stages:
-  - build
+  - setup
   - test
+  - build
 
-build:
-  stage: build
-  image: trion/ng-cli
-  before_script:
-    - npm ci
+setup:
+  image: cypress/base:latest
+  stage: setup
   script:
-    - ng build --prod
-  artifacts:
-    paths:
-    - dist/
-  tags:
-    - docker
+      - npm ci
 
 
 # Deze testen runnen asynschroon van elkaar
@@ -51,19 +37,6 @@ test-unit_nr2:
     - export CHROME_BIN=/usr/bin/google-chrome
   script:
     - npm run test --include='**/test/unit/example2.spec.ts'
-
-  # Voor maar één file 
-  # test:karma:
-  #   stage: test
-  #   image: trion/ng-cli-karma:latest
-  #   allow_failure: false
-  #   script:
-  #   - npm run test --include='**/test/unit/example2.spec.ts' --progress false --watch false
-  #   artifacts:
-  #     paths:
-  #       - dist/
-  #   tags:
-  #   - docker
 
 test:e2e:
   stage: test
@@ -95,6 +68,15 @@ test:nglint:
   tags:
   - docker
 
+build:
+  stage: build
+  script:
+    - ng build 
+  artifacts:
+    paths:
+    - dist
+  tags:
+    - docker
 
 
 
