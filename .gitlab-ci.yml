@@ -30,12 +30,7 @@ build:
   script: 
       - ng build 
       - ng test:ci 
- artifacts:
-  expire_in: 1 day
-  paths:
-   - dist/
- tags:
-  - docker
+
 
 # Deze testen runnen asynschroon van elkaar
 test-unit_nr1:
