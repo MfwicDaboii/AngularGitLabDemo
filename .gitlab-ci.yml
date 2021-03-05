@@ -38,7 +38,7 @@
   # Voor alle testen uit te voeren
   test:karma:
     stage: test
-    image: trion/ng-cli-karma
+    image: trion/ng-cli-karma:latest
     allow_failure: false
     script:
     - npm run test --progress false --watch false
@@ -47,7 +47,7 @@
 
   test:e2e:
     stage: test
-    image: trion/ng-cli-e2e
+    image: trion/ng-cli-e2e:latest
     allow_failure: false
     script:
     - ng e2e
@@ -56,7 +56,7 @@
 
   test:code-coverage:
     stage: test
-    image: trion/ng-cli-karma
+    image: trion/ng-cli-karma:latest
     allow_failure: false
     script:
       - ng test --code-coverage --progress false --watch false
@@ -69,7 +69,7 @@
 
   test:nglint:
     stage: test
-    image: trion/ng-cli
+    image: trion/ng-cli:latest
     script:
     - ng lint
     tags:
