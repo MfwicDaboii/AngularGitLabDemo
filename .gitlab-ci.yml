@@ -11,7 +11,7 @@ cache:
   paths:
       - node_modules/
       - .npm
-
+      
 stages:
   - setup
   - test
