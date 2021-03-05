@@ -22,31 +22,21 @@ setup:
   script:
       - npm ci
 
+#unit testen
+test:karma:
+stage: test
+image: trion/ng-cli-karma
+allow_failure: false
+script:
+- npm ci
+- ng test --progress false --watch false
+artifacts:
+reports:
+junit: report.xml
+tags:
+- docker
 
-# Deze testen runnen asynschroon van elkaar
-test-unit_nr1:
-  stage: test
-  image: trion/ng-cli-e2e:latest
-  script:
-    - npm run test --include='**/test/unit/example.spec.ts'
-
-# Deze testen runnen asynschroon van elkaar
-test-unit_nr2:
-  stage: test
-  image: trion/ng-cli-e2e:latest
-  script:
-    - npm run test --include='**/test/unit/example2.spec.ts'
-
-javascript:
-  stage: test
-  script:
-    - karma start --reporters junit
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - junit.xml
-
+#end - 2 - end testen
 test:e2e:
   stage: test
   image: trion/ng-cli-e2e:latest
@@ -56,6 +46,7 @@ test:e2e:
   tags:
   - docker  
 
+#code coverage for code quality
 test:code-coverage:
   stage: test
   image: trion/ng-cli-karma:latest
@@ -69,6 +60,7 @@ test:code-coverage:
   tags:
     - docker
 
+#Angular linter for code smells
 test:nglint:
   stage: test
   image: trion/ng-cli:latest
