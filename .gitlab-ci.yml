@@ -22,14 +22,20 @@ cache:
 
 build:
   stage: build 
-  image: svaseghi/node-chrome:v1 
+  image: trion/ng-cli
   before_script: 
       - export CHROME_BIN=/usr/bin/google-chrome 
       - npm ci 
  
   script: 
-      - ng build 
+      - ng build --prod
       - ng test:ci 
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/
+  tags:
+    - docker
 
 
 # Deze testen runnen asynschroon van elkaar
