@@ -19,22 +19,31 @@ stages:
   - test
   # - deploy
 
-test-unit:                                                    #job name
-  stage: test
-  # image: alpine:latest                                      # docker image                                                  
-  script:                                                     # List of job steps to execute
-    - ng test:unit                                            # Command to run in docker image
-
-
-build:
+ build:
   stage: build
   script:
-    - ng build
+    - npm run build
   artifacts:
     paths:
       - dist
   only:
     - master
+
+test_async:
+  stage: test
+  script:
+    - npm  install
+    - node ./specs/start.js ./specs/async.spec.js             # Refrence naar de file waar de testen in staan
+
+test-unit:                                                    #job name
+  stage: test
+  # image: alpine:latest                                      # docker image                                                  
+  script:                                                     # List of job steps to execute
+     - npm run test:unit                                      # Command to run in docker image
+
+
+
+
 
 #  say_hello:              
 #   
