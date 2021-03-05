@@ -2,9 +2,6 @@
 # https://hub.docker.com/r/library/node/tags/
 image: node:latest
 
-variables:
-  CLI_VERSION: 6.2.1
-
 stages:
   - build
   - test
@@ -25,7 +22,7 @@ cache:
 
 build:
   stage: build 
-  image: trion/ng-cli
+  image: trion/ng-cli:latest
   before_script: 
       - export CHROME_BIN=/usr/bin/google-chrome 
       - npm ci 
