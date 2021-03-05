@@ -22,12 +22,12 @@
 
   build:
     stage: build 
-    image: trion/ng-cli
+    image: trion/ng-cli:latest
     before_script: 
         - npm i 
   
     script: 
-        - ng build --prod
+        - ng build
     artifacts:
       expire_in: 1 day
       paths:
@@ -36,17 +36,17 @@
       - docker
 
   # Voor maar één file 
-  test:karma:
-    stage: test
-    image: trion/ng-cli-karma:latest
-    allow_failure: false
-    script:
-    - npm run test --include='**/test/unit/example.spec.ts' --progress false --watch false
-    artifacts:
-      paths:
-        - dist/
-    tags:
-    - docker
+  # test:karma:
+  #   stage: test
+  #   image: trion/ng-cli-karma:latest
+  #   allow_failure: false
+  #   script:
+  #   - npm run test --include='**/test/unit/example2.spec.ts' --progress false --watch false
+  #   artifacts:
+  #     paths:
+  #       - dist/
+  #   tags:
+  #   - docker
 
   test:e2e:
     stage: test
@@ -79,13 +79,18 @@
     - docker
   
 # # Deze testen runnen asynschroon van elkaar
-# test-unit_nr1:
-#   stage: test
-#   script:
-#     - npm run test --include='**/test/unit/example.spec.ts'
+test-unit_nr1:
+  stage: test
+   before_script:
+    - export CHROME_BIN=/usr/bin/google-chrome
+  script:
+    - npm run test --include='**/test/unit/example.spec.ts'
+
 
 # # Deze testen runnen asynschroon van elkaar
-# test-unit_nr2:
-#   stage: test
-#   script:
-#     - npm run test --include='**/test/unit/example2.spec.ts'
+test-unit_nr2:
+  stage: test
+   before_script:
+    - export CHROME_BIN=/usr/bin/google-chrome
+  script:
+    - npm run test --include='**/test/unit/example2.spec.ts'
