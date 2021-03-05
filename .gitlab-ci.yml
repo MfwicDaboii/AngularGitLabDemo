@@ -42,6 +42,9 @@
     allow_failure: false
     script:
     - npm run test --include='**/test/unit/example.spec.ts' --progress false --watch false
+    artifacts:
+      paths:
+        - dist/
     tags:
     - docker
 
