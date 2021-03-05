@@ -9,10 +9,10 @@ stages:
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
-services:
-  - mysql:latest
-  - redis:latest
-  - postgres:latest
+# services:
+#   - mysql:latest
+#   - redis:latest
+#   - postgres:latest
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
@@ -21,14 +21,28 @@ cache:
     - node_modules/
     - .npm
 
+build:
+ stage: build
+ image: trion/ng-cli
+ before_script:
+  - npm ci
+ script:
+  - ng build --prod
+ artifacts:
+  expire_in: 1 day
+  paths:
+   - dist/
+ tags:
+  - docker
+
 # Deze testen runnen asynschroon van elkaar
 test-unit_nr1:
   stage: test
   script:
-    - ng test --include='**/test/unit/example.spec.ts'
+    - npm run test --include='**/test/unit/example.spec.ts'
 
 # Deze testen runnen asynschroon van elkaar
 test-unit_nr2:
   stage: test
   script:
-    - ng test --include='**/test/unit/example2.spec.ts'
+    - npm run test --include='**/test/unit/example2.spec.ts'
