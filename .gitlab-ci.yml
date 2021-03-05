@@ -1,58 +1,88 @@
-# Official framework image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/node/tags/
-image: node:latest
+  # Official framework image. Look for the different tagged releases at:
+  # https://hub.docker.com/r/library/node/tags/
+  image: node:latest
 
-stages:
-  - build
-  - test
+  stages:
+    - build
+    - test
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
-# services:
-#   - mysql:latest
-#   - redis:latest
-#   - postgres:latest
+  # Pick zero or more services to be used on all builds.
+  # Only needed when using a docker container to run your tests in.
+  # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
+  # services:
+  #   - mysql:latest
+  #   - redis:latest
+  #   - postgres:latest
 
-# This folder is cached between builds
-# http://docs.gitlab.com/ee/ci/yaml/README.html#cache
-cache:
-  paths:
-    - node_modules/
-
-build:
-  stage: build 
-  image: trion/ng-cli
-  before_script: 
-      - export CHROME_BIN=/usr/bin/google-chrome 
-      - npm ci 
- 
-  script: 
-      - ng build --prod
-  artifacts:
-    expire_in: 1 day
+  # This folder is cached between builds
+  # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
+  cache:
     paths:
-      - dist/
-  tags:
+      - node_modules/
+
+  build:
+    stage: build 
+    image: trion/ng-cli
+    before_script: 
+        - npm ci 
+  
+    script: 
+        - ng build --prod
+    artifacts:
+      expire_in: 1 day
+      paths:
+        - dist/
+    tags:
+      - docker
+
+  # Voor alle testen uit te voeren
+  test:karma:
+    stage: test
+    image: trion/ng-cli-karma:latest
+    allow_failure: false
+    script:
+    - npm run test --progress false --watch false
+    tags:
     - docker
 
-test:karma:
-  stage: test
-  image: trion/ng-cli-karma:latest
-  allow_failure: false
-  script:
-  - npm run test --progress false --watch false
-  tags:
-  - docker
-  
-# Deze testen runnen asynschroon van elkaar
-test-unit_nr1:
-  stage: test
-  script:
-    - npm run test --include='**/test/unit/example.spec.ts'
+  test:e2e:
+    stage: test
+    image: trion/ng-cli-e2e:latest
+    allow_failure: false
+    script:
+    - ng e2e
+    tags:
+    - docker  
 
-# Deze testen runnen asynschroon van elkaar
-test-unit_nr2:
-  stage: test
-  script:
-    - npm run test --include='**/test/unit/example2.spec.ts'
+  test:code-coverage:
+    stage: test
+    image: trion/ng-cli-karma
+    allow_failure: false
+    script:
+      - ng test --code-coverage --progress false --watch false
+    coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+    artifacts:
+      paths:
+        - coverage/
+    tags:
+      - docker
+
+  test:nglint:
+    stage: test
+    image: trion/ng-cli:${CLI_VERSION}
+    script:
+    - ng lint
+    tags:
+    - docker
+  
+# # Deze testen runnen asynschroon van elkaar
+# test-unit_nr1:
+#   stage: test
+#   script:
+#     - npm run test --include='**/test/unit/example.spec.ts'
+
+# # Deze testen runnen asynschroon van elkaar
+# test-unit_nr2:
+#   stage: test
+#   script:
+#     - npm run test --include='**/test/unit/example2.spec.ts'
