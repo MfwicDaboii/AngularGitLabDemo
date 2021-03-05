@@ -1,51 +1,27 @@
-image: node:latest                                            # The language you are using (So that docker knows whats up)
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+image: node:latest
 
-variables:                                                    # Variables so you don't install the samething over and over again
-    npm_config_cache: "$CI_PROJECT_DIR/.npm"
-    # CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
-    # SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"             # Defines the location of the analysis task cache
-    # GIT_DEPTH: "0"                                          # Tells git to fetch all the branches of the project, required by the analysis task
+# Pick zero or more services to be used on all builds.
+# Only needed when using a docker container to run your tests in.
+# Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
+services:
+  - mysql:latest
+  - redis:latest
+  - postgres:latest
 
+# This folder is cached between builds
+# http://docs.gitlab.com/ee/ci/yaml/README.html#cache
 cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-        - node_modules/
-        - .npm
-        # - cache/Cypress
-
-stages:
-  - setup
-  - build
-  - test
-  # - deploy
-
- build:
-  stage: build
-  script:
-    - npm run build
-  artifacts:
-    paths:
-      - dist
-  only:
-    - master
+  paths:
+    - node_modules/
 
 test_async:
-  stage: test
   script:
-    - npm  install
-    - node ./specs/start.js ./specs/async.spec.js             # Refrence naar de file waar de testen in staan
+    - npm install
+    - node ./specs/start.js ./specs/async.spec.js
 
-test-unit:                                                    #job name
-  stage: test
-  # image: alpine:latest                                      # docker image                                                  
-  script:                                                     # List of job steps to execute
-     - npm run test:unit                                      # Command to run in docker image
-
-
-
-
-
-#  say_hello:              
-#   
-#   script:                 
-#     - echo 'Hello World'  
+test_db:
+  script:
+    - npm install
+    - node ./specs/start.js ./specs/db-postgres.spec.js
