@@ -15,42 +15,42 @@ variables:
 
   # This folder is cached between builds
   # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
-  cache:
+cache:
+  paths:
+      - node_modules/
+      - .npm
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: trion/ng-cli
+  before_script:
+    - npm ci
+  script:
+    - ng build --prod
+  artifacts:
     paths:
-        - node_modules/
-        - .npm
-
-  stages:
-    - build
-    - test
-
-  build:
-    stage: build
-    image: trion/ng-cli
-    before_script:
-      - npm ci
-    script:
-      - ng build --prod
-    artifacts:
-      paths:
-      - dist/
-    tags:
-      - docker
+    - dist/
+  tags:
+    - docker
 
 
-  # Deze testen runnen asynschroon van elkaar
-  test-unit_nr1:
-    stage: test
-    script:
-      - npm run test --include='**/test/unit/example.spec.ts'
+# Deze testen runnen asynschroon van elkaar
+test-unit_nr1:
+  stage: test
+  script:
+    - npm run test --include='**/test/unit/example.spec.ts'
 
-  # Deze testen runnen asynschroon van elkaar
-  test-unit_nr2:
-    stage: test
-    before_script:
-      - export CHROME_BIN=/usr/bin/google-chrome
-    script:
-      - npm run test --include='**/test/unit/example2.spec.ts'
+# Deze testen runnen asynschroon van elkaar
+test-unit_nr2:
+  stage: test
+  before_script:
+    - export CHROME_BIN=/usr/bin/google-chrome
+  script:
+    - npm run test --include='**/test/unit/example2.spec.ts'
 
   # Voor maar één file 
   # test:karma:
@@ -65,36 +65,36 @@ variables:
   #   tags:
   #   - docker
 
-  test:e2e:
-    stage: test
-    image: trion/ng-cli-e2e:latest
-    allow_failure: false
-    script:
-    - ng e2e
-    tags:
-    - docker  
+test:e2e:
+  stage: test
+  image: trion/ng-cli-e2e:latest
+  allow_failure: false
+  script:
+  - ng e2e
+  tags:
+  - docker  
 
-  test:code-coverage:
-    stage: test
-    image: trion/ng-cli-karma:latest
-    allow_failure: false
-    script:
-      - ng test --code-coverage --progress false --watch false
-    coverage: '/Lines \W+: (\d+\.\d+)%.*/'
-    artifacts:
-      paths:
-        - coverage/
-    tags:
-      - docker
-
-  test:nglint:
-    stage: test
-    image: trion/ng-cli:latest
-    script:
-    - ng lint
-    tags:
+test:code-coverage:
+  stage: test
+  image: trion/ng-cli-karma:latest
+  allow_failure: false
+  script:
+    - ng test --code-coverage --progress false --watch false
+  coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+  artifacts:
+    paths:
+      - coverage/
+  tags:
     - docker
-  
-  
+
+test:nglint:
+  stage: test
+  image: trion/ng-cli:latest
+  script:
+  - ng lint
+  tags:
+  - docker
+
+
 
 
