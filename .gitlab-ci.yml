@@ -3,8 +3,9 @@
   image: node:latest
 
   stages:
-    - build
+    - setup
     - test
+    - build
 
   # Pick zero or more services to be used on all builds.
   # Only needed when using a docker container to run your tests in.
@@ -20,20 +21,26 @@
     paths:
       - node_modules/
 
-  build:
-    stage: build 
+  setup:
     image: trion/ng-cli:latest
-    before_script: 
-        - npm i 
+    stage: setup
+    script:
+      - npm ci
+
   
-    script: 
-        - ng build
-    artifacts:
-      expire_in: 1 day
-      paths:
-        - dist/
-    tags:
-      - docker
+  # Deze testen runnen asynschroon van elkaar
+  test-unit_nr1:
+    stage: test
+    script:
+      - npm run test --include='**/test/unit/example.spec.ts'
+
+  # Deze testen runnen asynschroon van elkaar
+  test-unit_nr2:
+    stage: test
+    before_script:
+      - export CHROME_BIN=/usr/bin/google-chrome
+    script:
+      - npm run test --include='**/test/unit/example2.spec.ts'
 
   # Voor maar één file 
   # test:karma:
@@ -78,18 +85,14 @@
     tags:
     - docker
   
-# Deze testen runnen asynschroon van elkaar
-  test-unit_nr1:
-    stage: test
-    before_script:
-      - export CHROME_BIN=/usr/bin/google-chrome
-    script:
-      - npm run test --include='**/test/unit/example.spec.ts'
+  
+  build:
+    stage: build 
+    script: 
+        - ng build
+    artifacts:
+      paths:
+        - dist/
+    tags:
+      - docker
 
-  # Deze testen runnen asynschroon van elkaar
-  test-unit_nr2:
-    stage: test
-    before_script:
-      - export CHROME_BIN=/usr/bin/google-chrome
-    script:
-      - npm run test --include='**/test/unit/example2.spec.ts'
