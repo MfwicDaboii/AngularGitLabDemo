@@ -21,7 +21,7 @@ setup:
   stage: setup
   script:
       - npm ci
-
+      
 #unit testen
 test:karma:
   stage: test
