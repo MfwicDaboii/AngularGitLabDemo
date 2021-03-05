@@ -11,14 +11,13 @@ cache:
   paths:
       - node_modules/
       - .npm
-      
+
 stages:
   - setup
   - test
   - build
 
 setup:
-  image: cypress/base:latest
   stage: setup
   script:
       - npm ci
