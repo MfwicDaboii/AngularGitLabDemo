@@ -25,7 +25,8 @@
     image: trion/ng-cli:latest
     stage: setup
     script:
-      - npm ci
+      - npm config set unsafe-perm=true
+      - npm i
 
   
   # Deze testen runnen asynschroon van elkaar
