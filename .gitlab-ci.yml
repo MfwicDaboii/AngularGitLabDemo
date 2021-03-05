@@ -86,7 +86,6 @@
     script:
       - npm run test --include='**/test/unit/example.spec.ts'
 
-
   # Deze testen runnen asynschroon van elkaar
   test-unit_nr2:
     stage: test
