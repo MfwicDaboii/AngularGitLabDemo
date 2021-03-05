@@ -1,23 +1,42 @@
-stages:
-  - build_angular
-  - say_hello
+image: node:latest                                            # The language you are using (So that docker knows whats up)
+
+variables:                                                    # Variables so you don't install the samething over and over again
+    npm_config_cache: "$CI_PROJECT_DIR/.npm"
+    # CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+    # SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"             # Defines the location of the analysis task cache
+    # GIT_DEPTH: "0"                                          # Tells git to fetch all the branches of the project, required by the analysis task
 
 cache:
-  paths:
-    - ./node_modules
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+        - node_modules/
+        - .npm
+        # - cache/Cypress
 
-generate_artifact:
- image: node:12-alpine
- stage: build_angular
- script:
-  - npm install -g @angular/cli --silent
-  - npm install --silent
-  - ng build --prod --output-hashing none
- artifacts:
-  paths:
-    - dist/
- 
- say_hello:               #job name
-  image: alpine:latest    #docker image
-  script:                 # List of job steps to execute
-    - echo 'Hello World'  # Command to run in docker image
+stages:
+  - setup
+  - build
+  - test
+  # - deploy
+
+test-unit:                                                    #job name
+  stage: test
+  # image: alpine:latest                                      # docker image                                                  
+  script:                                                     # List of job steps to execute
+    - ng test:unit                                            # Command to run in docker image
+
+
+build:
+  stage: build
+  script:
+    - ng build
+  artifacts:
+    paths:
+      - dist
+  only:
+    - master
+
+#  say_hello:              
+#   
+#   script:                 
+#     - echo 'Hello World'  
