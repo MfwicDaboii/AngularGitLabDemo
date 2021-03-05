@@ -2,10 +2,8 @@
   # https://hub.docker.com/r/library/node/tags/
   image: node:latest
 
-  stages:
-    - setup
-    - test
-    - build
+variables:
+    npm_config_cache: "$CI_PROJECT_DIR/.npm"
 
   # Pick zero or more services to be used on all builds.
   # Only needed when using a docker container to run your tests in.
@@ -19,16 +17,27 @@
   # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
   cache:
     paths:
-      - node_modules/
+        - node_modules/
+        - .npm
 
-  setup:
-    image: trion/ng-cli:latest
-    stage: setup
+  stages:
+    - build
+    - test
+
+  build:
+    stage: build
+    image: trion/ng-cli
+    before_script:
+      - npm ci
     script:
-      - npm config set unsafe-perm=true
-      - npm i
+      - ng build --prod
+    artifacts:
+      paths:
+      - dist/
+    tags:
+      - docker
 
-  
+
   # Deze testen runnen asynschroon van elkaar
   test-unit_nr1:
     stage: test
@@ -87,13 +96,5 @@
     - docker
   
   
-  build:
-    stage: build 
-    script: 
-        - ng build
-    artifacts:
-      paths:
-        - dist/
-    tags:
-      - docker
+
 
