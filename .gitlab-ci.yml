@@ -1,0 +1,23 @@
+stages:
+  - build_angular
+  - say_hello
+
+cache:
+  paths:
+    - ./node_modules
+
+generate_artifact:
+ image: node:12-alpine
+ stage: build_angular
+ script:
+  - npm install -g @angular/cli --silent
+  - npm install --silent
+  - ng build --prod --output-hashing none
+ artifacts:
+  paths:
+    - dist/
+ 
+ say_hello:               #job name
+  image: alpine:latest    #docker image
+  script:                 # List of job steps to execute
+    - echo 'Hello World'  # Command to run in docker image
