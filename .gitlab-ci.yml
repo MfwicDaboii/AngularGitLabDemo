@@ -81,7 +81,7 @@
 # Deze testen runnen asynschroon van elkaar
   test-unit_nr1:
     stage: test
-      before_script:
+    before_script:
       - export CHROME_BIN=/usr/bin/google-chrome
     script:
       - npm run test --include='**/test/unit/example.spec.ts'
