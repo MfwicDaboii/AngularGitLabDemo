@@ -24,7 +24,7 @@
     stage: build 
     image: trion/ng-cli:latest
     before_script: 
-        - npm ci 
+        - npm i 
   
     script: 
         - ng build
