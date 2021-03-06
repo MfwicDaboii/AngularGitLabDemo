@@ -30,6 +30,7 @@ test:karma:
   script:
     - npm ci
     - ng test --progress false --watch false
+    - npm install karma-junit-reporter
     - karma start --reporters junit
   artifacts:
     reports:
