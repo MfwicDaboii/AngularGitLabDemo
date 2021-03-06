@@ -30,6 +30,7 @@ test:karma:
   script:
     - npm ci
     - ng test --progress false --watch false
+    - karma start --reporters junit
   artifacts:
     reports:
       junit: testReports/report.xml
@@ -72,7 +73,7 @@ test:nglint:
 build:
   stage: build
   script:
-    - npm build --prod
+    - npm run build
   artifacts:
     paths:
     - dist
