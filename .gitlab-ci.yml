@@ -89,14 +89,14 @@ build:
 #   tags:
 #   - docker
 
-# registry:
-#   enabled: true
-#   host: registry.gitlab.com/mfwicdaboii/angulargitlabdemo
-#   port: 5000
-#   api_url: http://localhost:5000/
-#   key: config/registry.key
-#   path: shared/registry
-#   issuer: gitlab-issuer
+registry:
+  enabled: true
+  host: registry.gitlab.com/mfwicdaboii/angulargitlabdemo
+  port: 5000
+  api_url: http://localhost:5000/
+  key: config/registry.key
+  path: shared/registry
+  issuer: gitlab-issuer
  
 docker-job:
   stage: docker
