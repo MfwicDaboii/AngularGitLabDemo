@@ -14,13 +14,29 @@ cache:
 
 stages:
   - setup
-  - test
   - build
+  - test
+  - report
+  - docker
+
+services:
+   - docker:dind
 
 setup:
   stage: setup
   script:
       - npm ci
+
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+    - dist
+  tags:
+    - docker
 
 #unit testen
 test:karma:
@@ -50,7 +66,7 @@ test:e2e:
 
 #code coverage for code quality
 test:code-coverage:
-  stage: test
+  stage: report
   image: trion/ng-cli-karma:latest
   allow_failure: false
   script:
@@ -64,22 +80,18 @@ test:code-coverage:
 
 #Angular linter for code smells
 test:nglint:
-  stage: test
+  stage: report
   image: trion/ng-cli:latest
   script:
   - ng lint
   tags:
   - docker
 
-build:
-  stage: build
+docker-job:
+  stage: docker
+  image: docker:dind
   script:
-    - npm run build
-  artifacts:
-    paths:
-    - dist
-  tags:
-    - docker
+    - docker build .
 
 
 
