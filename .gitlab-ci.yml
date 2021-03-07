@@ -97,7 +97,7 @@ build:
 #   key: config/registry.key
 #   path: shared/registry
 #   issuer: gitlab-issuer
-
+ 
 docker-job:
   stage: docker
   image: docker:dind
