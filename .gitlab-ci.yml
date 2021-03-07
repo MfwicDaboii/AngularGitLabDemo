@@ -12,20 +12,13 @@ cache:
       - node_modules/
       - .npm
 
-registry:
-  enabled: true
-  host: registry.gitlab.com/mfwicdaboii/angulargitlabdemo
-  port: 5000
-  api_url: http://localhost:5000/
-  key: config/registry.key
-  path: shared/registry
-  issuer: gitlab-issuer
       
 stages:
   - setup
   - build
   # - test
   # - report
+  - registry
   - docker
 
 services:
@@ -95,6 +88,15 @@ build:
 #   - ng lint
 #   tags:
 #   - docker
+
+# registry:
+#   enabled: true
+#   host: registry.gitlab.com/mfwicdaboii/angulargitlabdemo
+#   port: 5000
+#   api_url: http://localhost:5000/
+#   key: config/registry.key
+#   path: shared/registry
+#   issuer: gitlab-issuer
 
 docker-job:
   stage: docker
