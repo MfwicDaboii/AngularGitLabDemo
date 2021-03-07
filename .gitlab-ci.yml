@@ -55,6 +55,7 @@ test:karma:
   tags:
     - docker
 
+
 #end - 2 - end testen
 test:e2e:
   stage: test
@@ -87,7 +88,6 @@ test:nglint:
   - ng lint
   tags:
   - docker
-
  
 docker-job:
   stage: docker
