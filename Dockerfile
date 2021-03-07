@@ -1,7 +1,6 @@
-  FROM svaseghi/node-chrome:latest 
-  WORKDIR /usr/src/app 
-  COPY package.json package-lock.json ./ 
-  RUN npm ci 
-  COPY . . 
-  ENV CHROME_BIN=/usr/bin/google-chrome 
-  ENTRYPOINT ng test
+FROM node:12.7-alpine 
+WORKDIR /usr/src/app 
+COPY package.json package-lock.json ./ 
+RUN npm ci && npm install karma-cli
+COPY . . 
+ENTRYPOINT npm run test 

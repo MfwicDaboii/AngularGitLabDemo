@@ -47,6 +47,7 @@ test:karma:
     - npm ci
     - ng test --progress false --watch false
     - npm install karma-junit-reporter
+    - npm install karma-cli
     - karma start --reporters junit
   artifacts:
     reports:
