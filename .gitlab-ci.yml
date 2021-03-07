@@ -45,8 +45,8 @@ test:karma:
   script:
     - npm ci
     - ng test --progress false --watch false
-    - npm install karma-junit-reporter
-    - npm install karma-cli
+    # - npm install karma-junit-reporter
+    # - npm install karma-cli
     # - karma start --reporters junit
   # artifacts:
   #   reports:
@@ -91,7 +91,9 @@ docker-job:
   stage: docker
   image: docker:dind
   script:
-    - docker build .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD CI_REGISTRY_USER
+    - docker build -t registry.gitlab.com/mfwicdaboii/angulargitlabdemo .
+    - docker push registry.gitlab.com/mfwicdaboii/angulargitlabdemo
 
 
 
