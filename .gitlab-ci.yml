@@ -14,30 +14,29 @@ cache:
 
       
 stages:
-  - setup
-  - build
+  # - setup
+  # - build
   # - test
   # - report
-  - registry
   - docker
 
 services:
    - docker:dind
 
-setup:
-  stage: setup
-  script:
-      - npm ci
+# setup:
+#   stage: setup
+#   script:
+#       - npm ci
 
-build:
-  stage: build
-  script:
-    - npm run build
-  artifacts:
-    paths:
-    - dist
-  tags:
-    - docker
+# build:
+#   stage: build
+#   script:
+#     - npm run build
+#   artifacts:
+#     paths:
+#     - dist
+#   tags:
+#     - docker
 
 # #unit testen
 # test:karma:
@@ -89,21 +88,21 @@ build:
 #   tags:
 #   - docker
 
-registry:
-  enabled: true
-  host: registry.gitlab.com/mfwicdaboii/angulargitlabdemo
-  port: 5000
-  api_url: http://localhost:5000/
-  key: config/registry.key
-  path: shared/registry
-  issuer: gitlab-issuer
+# registry:
+#   enabled: true
+#   host: registry.gitlab.com/mfwicdaboii/angulargitlabdemo
+#   port: 5000
+#   api_url: http://localhost:5000/
+#   key: config/registry.key
+#   path: shared/registry
+#   issuer: gitlab-issuer
  
 docker-job:
   stage: docker
   image: docker:dind
   script:
     - echo $CI_REGISTRY_USER; echo $CI_REGISTRY
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t registry.gitlab.com/mfwicdaboii/angulargitlabdemo .
     - docker push registry.gitlab.com/mfwicdaboii/angulargitlabdemo
 
