@@ -16,9 +16,9 @@ stages:
   - setup
   - build
   - analyse
-  # - test
-  # - report
-  # - docker
+  - test
+  - report
+  - docker
 
 services:
    - docker:dind
@@ -37,6 +37,7 @@ build:
     - dist
   tags:
     - docker
+
 analyse:sonar:
   stage: analyse
   image:
@@ -60,6 +61,7 @@ analyse:sonar:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: on_success
     - when: never
+
 #unit testen
 test:karma:
   stage: test
