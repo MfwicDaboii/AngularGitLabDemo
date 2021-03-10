@@ -48,16 +48,16 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome', 'ChromeHeadless'],
+    browsers: ['Chrome'],
     customLaunchers:{
-      Headless: {
-        base: 'ChromeHeadless',
-        flags: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          "--js-flags=--max-old-space-size=8196", // THIS LINE FIXED IT!!!
-        ]
-      }
+      // Headless: {
+      //   base: 'ChromeHeadless',
+      //   flags: [
+      //     '--no-sandbox',
+      //     '--disable-setuid-sandbox',
+      //     "--js-flags=--max-old-space-size=8196", // THIS LINE FIXED IT!!!
+      //   ]
+      // }
     },
     singleRun: false,
     restartOnFileChange: true
