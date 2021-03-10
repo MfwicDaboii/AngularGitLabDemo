@@ -38,7 +38,7 @@ build:
   tags:
     - docker
 analyse:sonar:
-  stage: analyze
+  stage: analyse
   image:
     name: sonarsource/sonar-scanner-cli:4.5
     entrypoint: [""]
