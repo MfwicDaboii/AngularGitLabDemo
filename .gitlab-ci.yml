@@ -4,13 +4,20 @@ image: node:latest
 
 variables:
     npm_config_cache: "$CI_PROJECT_DIR/.npm"
+    CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+
 
   # This folder is cached between builds
   # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
       - node_modules/
       - .npm
+      - cache/Cypress
+
     
 stages:
   - setup
@@ -24,9 +31,14 @@ services:
    - docker:dind
 
 setup:
+  image: cypress/base:latest
   stage: setup
   script:
-      - npm ci
+    - npm ci
+    - npx cypress cache path
+    - npx cypress cache list
+    - npx cypress verify
+    - npx cypress info
 
 build:
   stage: build
@@ -82,10 +94,16 @@ test:karma:
 #end - 2 - end testen
 test:e2e:
   stage: test
-  image: trion/ng-cli-e2e:latest
+  image: cypress/base:latest
   allow_failure: false
   script:
   - ng e2e
+  artifacts:
+    when: always
+    paths:
+      - tests/e2e/videos/**/*.mp4
+      - tests/e2e/screenshots/**/*.png
+    expire_in: 1 day
   tags:
   - docker  
 
