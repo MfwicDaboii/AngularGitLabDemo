@@ -95,7 +95,7 @@ test:e2e:
   image: cypress/base:latest
   allow_failure: false
   script:
-  - ng e2e
+  - npm run e2e
   artifacts:
     when: always
     paths:
