@@ -65,7 +65,7 @@ analyse:sonar:
     paths:
       - .sonar/cache
   script:
-    - sonar-scanner
+    - sonar-scanner -Dsonar.host.url=http://localhost:9000 
   rules:
     # SonarQube CommunityEdition only supports analyzing a single branch.
     # So only run on master.
