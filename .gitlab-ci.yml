@@ -19,7 +19,7 @@ cache:
    
 stages:
   - setup
-  - analyse
+  # - analyse
   # - build
   - test
   - report
@@ -27,6 +27,7 @@ stages:
 
 services:
    - docker:dind
+
 
 setup:
   image: cypress/base:latest
@@ -49,29 +50,34 @@ setup:
 #     - docker
 
 # #SonarQube: Can only scan one branche when using free version
-analyse:sonar:
-  stage: analyse
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    # Defines the location of the analysis task cache
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
-    # Shallow cloning needs to be disabled.
-    # See https://docs.sonarqube.org/latest/analysis/gitlab-cicd/.
-    GIT_DEPTH: 0
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - sonar-scanner
-  rules:
-    # SonarQube CommunityEdition only supports analyzing a single branch.
-    # So only run on master.
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      when: on_success
-    - when: never
+# analyse:sonar:
+#   stage: analyse
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     # Defines the location of the analysis task cache
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+#     # Shallow cloning needs to be disabled.
+#     # See https://docs.sonarqube.org/latest/analysis/gitlab-cicd/.
+#     GIT_DEPTH: 0
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   script:
+#     - sonar-scanner
+#   rules:
+#     # SonarQube CommunityEdition only supports analyzing a single branch.
+#     # So only run on master.
+#     - if: '$CI_COMMIT_BRANCH == "master"'
+#       when: on_success
+#     - when: never
+sast:
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
+
 
 #unit testen
 # test:karma:
@@ -91,20 +97,20 @@ analyse:sonar:
 #     - docker
 
 #end - 2 - end testen
-test:e2e:
-  stage: test
-  image: cypress/base:latest
-  allow_failure: false
-  script:
-  - npm run e2e
-  artifacts:
-    when: always
-    paths:
-      - tests/e2e/videos/**/*.mp4
-      - tests/e2e/screenshots/**/*.png
-    expire_in: 1 day
-  tags:
-  - docker  
+# test:e2e:
+#   stage: test
+#   image: cypress/base:latest
+#   allow_failure: false
+#   script:
+#   - npm run e2e
+#   artifacts:
+#     when: always
+#     paths:
+#       - tests/e2e/videos/**/*.mp4
+#       - tests/e2e/screenshots/**/*.png
+#     expire_in: 1 day
+#   tags:
+#   - docker  
 
 #code coverage for code quality
 test:code-coverage:
