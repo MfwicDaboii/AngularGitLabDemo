@@ -42,7 +42,7 @@ setup:
 build:
   stage: build
   script:
-    - npm run build
+    - ng build
   artifacts:
     paths:
     - dist
