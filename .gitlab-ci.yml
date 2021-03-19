@@ -25,9 +25,6 @@ stages:
   - report
   - docker
 
-services:
-   - docker:dind
-
 setup:
   image: cypress/base:latest
   stage: setup
@@ -150,7 +147,9 @@ build:
   stage: build
   image: trion/ng-cli
   script:
-    - ng build --prod
+    - rm ./package-lock.json
+    - npm install
+    - ./node_modules/@angular/cli/bin/ng build --prod --build-optimizer --progress=false
   artifacts:
     paths:
     - dist
