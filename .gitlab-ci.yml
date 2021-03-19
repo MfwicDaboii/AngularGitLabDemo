@@ -90,7 +90,7 @@ test:e2e:
   image: cypress/base:latest
   allow_failure: false
   script:
-  - ng e2e --progress false --watch false --headless
+  - ./node_modules/@angular/cli/bin/ng e2e --progress false --watch false --headless
   artifacts:
     when: always
     paths:
