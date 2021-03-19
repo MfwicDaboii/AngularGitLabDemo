@@ -10,12 +10,12 @@ variables:
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
-# cache:
-#   key: ${CI_COMMIT_REF_SLUG}
-#   paths:
-#       - node_modules/
-#       - .npm
-#       - cache/Cypress
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+      - node_modules/
+      - .npm
+      - cache/Cypress
    
 stages:
   - setup
@@ -34,7 +34,6 @@ setup:
   stage: setup
   script:
     - npm ci
-    - npm install --save-dev @angular-devkit/build-angular
     - npx cypress cache path
     - npx cypress cache list
     - npx cypress verify
@@ -44,6 +43,7 @@ build:
   stage: build
   image: trion/ng-cli
   script:
+    - npm install --save-dev @angular-devkit/build-angular
     - ng build --prod
   artifacts:
     paths:
