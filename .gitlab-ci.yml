@@ -26,14 +26,11 @@ stages:
   - docker
 
 setup:
-  image: cypress/base:latest
+  image: trion/ng-cli-karma
   stage: setup
   script:
     - npm ci
-    - npx cypress cache path
-    - npx cypress cache list
-    - npx cypress verify
-    - npx cypress info
+
 
 # #SonarQube: Can only scan one branche when using free version
 # analyse:sonar:
@@ -70,7 +67,6 @@ setup:
 #unit testen
 test:karma:
   stage: test
-  image: trion/ng-cli-karma
   allow_failure: false
   script:
     - npm ci
@@ -89,8 +85,14 @@ test:e2e:
   stage: test
   image: cypress/base:latest
   allow_failure: false
+  before_script:
+    - npm ci
+    - npx cypress cache path
+    - npx cypress cache list
+    - npx cypress verify
+    - npx cypress info
   script:
-  - ./node_modules/@angular/cli/bin/ng e2e --progress false --watch false --headless
+  - ng e2e --progress false --watch false --headless
   artifacts:
     when: always
     paths:
