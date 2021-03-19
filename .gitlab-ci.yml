@@ -10,12 +10,12 @@ variables:
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-      - node_modules/
-      - .npm
-      - cache/Cypress
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#       - node_modules/
+#       - .npm
+#       - cache/Cypress
    
 stages:
   - setup
