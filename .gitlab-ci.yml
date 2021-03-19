@@ -20,9 +20,9 @@ cache:
 stages:
   - setup
   # - analyse
-  - build
   - test
   - report
+  - build
   - docker
 
 setup:
@@ -125,7 +125,7 @@ test:nglint:
 
 #Linter for code smells, bugs and quality 
 lint:sonar:
-  stage: test
+  stage: report
   image: trion/ng-cli:latest
   script:
   - npm install -g sonarqube-scanner
