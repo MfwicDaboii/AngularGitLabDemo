@@ -20,20 +20,20 @@ variables:
 stages:
   - setup
   # - analyse
-  - test
+  # - test
   - report
   - build
   - docker
 
 setup:
-  image: cypress/base:latest
+  # image: cypress/base:latest
   stage: setup
   script:
     - npm ci
-    - npx cypress cache path
-    - npx cypress cache list
-    - npx cypress verify
-    - npx cypress info
+    # - npx cypress cache path
+    # - npx cypress cache list
+    # - npx cypress verify
+    # - npx cypress info
 
 # #SonarQube: Can only scan one branche when using free version
 # analyse:sonar:
@@ -85,20 +85,20 @@ setup:
 #     - docker
 
 #end - 2 - end testen
-test:e2e:
-  stage: test
-  image: cypress/base:latest
-  allow_failure: false
-  script:
-  - npx cypress run --headless
-  artifacts:
-    when: always
-    paths:
-      - $CI_PROJECT_DIR/cypress/videos/**/*.mp4
-      - $CI_PROJECT_DIR/cypress/screenshots/**/*.png
-    expire_in: 1 day
-  tags:
-  - docker  
+# test:e2e:
+#   stage: test
+#   image: cypress/base:latest
+#   allow_failure: false
+#   script:
+#   - npx cypress run --headless
+#   artifacts:
+#     when: always
+#     paths:
+#       - $CI_PROJECT_DIR/cypress/videos/**/*.mp4
+#       - $CI_PROJECT_DIR/cypress/screenshots/**/*.png
+#     expire_in: 1 day
+#   tags:
+#   - docker  
 
 # #code coverage for code quality
 # test:code-coverage:
