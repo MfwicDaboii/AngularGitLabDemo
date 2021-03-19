@@ -10,17 +10,17 @@ variables:
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-      - node_modules/
-      - .npm
-      - cache/Cypress
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#       - node_modules/
+#       - .npm
+#       - cache/Cypress
    
 stages:
   - setup
   # - analyse
-  # - build
+  - build
   - test
   - report
   - docker
@@ -34,20 +34,20 @@ setup:
   stage: setup
   script:
     - npm ci
-    # - npx cypress cache path
-    # - npx cypress cache list
-    # - npx cypress verify
-    # - npx cypress info
+    - npx cypress cache path
+    - npx cypress cache list
+    - npx cypress verify
+    - npx cypress info
 
-# build:
-#   stage: build
-#   script:
-#     - npm run build
-#   artifacts:
-#     paths:
-#     - dist
-#   tags:
-#     - docker
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+    - dist
+  tags:
+    - docker
 
 # #SonarQube: Can only scan one branche when using free version
 # analyse:sonar:
@@ -73,44 +73,44 @@ setup:
 #     - if: '$CI_COMMIT_BRANCH == "master"'
 #       when: on_success
 #     - when: never
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+# sast:
+#   stage: test
+# include:
+# - template: Security/SAST.gitlab-ci.yml
 
 
 #unit testen
-# test:karma:
-#   stage: test
-#   image: trion/ng-cli-karma
-#   allow_failure: false
-#   script:
-#     - npm ci
-#     - ng test --progress false --watch false
-#     # - npm install karma-junit-reporter
-#     # - npm install karma-cli
-#     # - karma start --reporters junit
-#   # artifacts:
-#   #   reports:
-#   #     junit: testReports/report.xml
-#   tags:
-#     - docker
+test:karma:
+  stage: test
+  image: trion/ng-cli-karma
+  allow_failure: false
+  script:
+    - npm ci
+    - npm install karma-junit-reporter
+    - npm install karma-cli
+    - ng test --progress false --watch false
+    - karma start --reporters junit
+  artifacts:
+    reports:
+      junit: $CI_PROJECT_DIR/artifacts/report.xml
+  tags:
+    - docker
 
 #end - 2 - end testen
-# test:e2e:
-#   stage: test
-#   image: cypress/base:latest
-#   allow_failure: false
-#   script:
-#   - npm run e2e
-#   artifacts:
-#     when: always
-#     paths:
-#       - tests/e2e/videos/**/*.mp4
-#       - tests/e2e/screenshots/**/*.png
-#     expire_in: 1 day
-#   tags:
-#   - docker  
+test:e2e:
+  stage: test
+  image: cypress/base:latest
+  allow_failure: false
+  script:
+  - npm run e2e --progress false --watch false
+  artifacts:
+    when: always
+    paths:
+      - $CI_PROJECT_DIR/cypress/videos/**/*.mp4
+      - $CI_PROJECT_DIR/cypress/screenshots/**/*.png
+    expire_in: 1 day
+  tags:
+  - docker  
 
 #code coverage for code quality
 test:code-coverage:
@@ -122,7 +122,7 @@ test:code-coverage:
   coverage: '/Lines \W+: (\d+\.\d+)%.*/'
   artifacts:
     paths:
-      - coverage/
+      - $CI_PROJECT_DIR/artifacts/app/coverage/
   tags:
     - docker
 
