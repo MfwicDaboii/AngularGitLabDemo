@@ -90,7 +90,7 @@ test:e2e:
   image: cypress/base:latest
   allow_failure: false
   script:
-  - npx cypress run --progress false --watch false --headless
+  - npx cypress run --headless
   artifacts:
     when: always
     paths:
@@ -145,7 +145,7 @@ lint:sonar:
 
 build:
   stage: build
-  image: trion/ng-cli
+  image: trion/ng-cli-karma
   script:
     - rm ./package-lock.json
     - npm install
