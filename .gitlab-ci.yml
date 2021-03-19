@@ -34,6 +34,7 @@ setup:
   stage: setup
   script:
     - npm ci
+    - npm install --save-dev @angular-devkit/build-angular
     - npx cypress cache path
     - npx cypress cache list
     - npx cypress verify
@@ -74,6 +75,8 @@ build:
 #     - if: '$CI_COMMIT_BRANCH == "master"'
 #       when: on_success
 #     - when: never
+
+
 # sast:
 #   stage: test
 # include:
@@ -135,6 +138,26 @@ test:nglint:
   - ng lint
   tags:
   - docker
+
+#Linter for code smells, bugs and quality 
+lint:sonar:
+  stage: test
+  image: trion/ng-cli:latest
+  script:
+  - npm install -g sonarqube-scanner
+  - >
+    sonar-scanner
+    -Dsonar.projectKey=test-app
+    -Dsonar.host.url=http://localhost:9000
+    -Dsonar.login=admin
+    -Dsonar.password=Wolfpower123!
+    -Dsonar.projectName=test-app
+    -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
+    -Dsonar.sourceEncoding=UTF-8
+    -Dsonar.sources=src/app
+    -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
+    -Dsonar.tests=src/app
+    -Dsonar.test.inclusions=**/*.spec.ts
 
 #Pushes this project to the container registry from GitLab inside a container
 docker-job:
