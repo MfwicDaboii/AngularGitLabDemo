@@ -68,21 +68,21 @@ setup:
 
 
 #unit testen
-test:karma:
-  stage: test
-  image: trion/ng-cli-karma
-  allow_failure: false
-  script:
-    - npm ci
-    # - npm install karma-junit-reporter
-    # - npm install karma-cli
-    - ng test --progress false --watch false
-    # - karma start --reporters junit
-  artifacts:
-    reports:
-      junit: $CI_PROJECT_DIR/artifacts/report.xml
-  tags:
-    - docker
+# test:karma:
+#   stage: test
+#   image: trion/ng-cli-karma
+#   allow_failure: false
+#   script:
+#     - npm ci
+#     # - npm install karma-junit-reporter
+#     # - npm install karma-cli
+#     - ng test --progress false --watch false
+#     # - karma start --reporters junit
+#   artifacts:
+#     reports:
+#       junit: $CI_PROJECT_DIR/artifacts/report.xml
+#   tags:
+#     - docker
 
 #end - 2 - end testen
 test:e2e:
