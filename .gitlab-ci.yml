@@ -74,10 +74,10 @@ test:karma:
   allow_failure: false
   script:
     - npm ci
-    - npm install karma-junit-reporter
-    - npm install karma-cli
+    # - npm install karma-junit-reporter
+    # - npm install karma-cli
     - ng test --progress false --watch false
-    - karma start --reporters junit
+    # - karma start --reporters junit
   artifacts:
     reports:
       junit: $CI_PROJECT_DIR/artifacts/report.xml
@@ -90,7 +90,7 @@ test:e2e:
   image: cypress/base:latest
   allow_failure: false
   script:
-  - npm run e2e --progress false --watch false
+  - ng e2e --progress false --watch false --headless
   artifacts:
     when: always
     paths:
