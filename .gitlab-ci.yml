@@ -28,7 +28,6 @@ stages:
 services:
    - docker:dind
 
-
 setup:
   image: cypress/base:latest
   stage: setup
@@ -38,17 +37,6 @@ setup:
     - npx cypress cache list
     - npx cypress verify
     - npx cypress info
-
-build:
-  stage: build
-  image: trion/ng-cli
-  script:
-    - ng build --prod
-  artifacts:
-    paths:
-    - dist
-  tags:
-    - docker
 
 # #SonarQube: Can only scan one branche when using free version
 # analyse:sonar:
@@ -157,6 +145,17 @@ lint:sonar:
     -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
     -Dsonar.tests=src/app
     -Dsonar.test.inclusions=**/*.spec.ts
+
+build:
+  stage: build
+  image: trion/ng-cli
+  script:
+    - ng build --prod
+  artifacts:
+    paths:
+    - dist
+  tags:
+    - docker
 
 #Pushes this project to the container registry from GitLab inside a container
 docker-job:
