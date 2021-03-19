@@ -41,8 +41,9 @@ setup:
 
 build:
   stage: build
+  image: trion/ng-cli
   script:
-    - ng build
+    - ng build --prod
   artifacts:
     paths:
     - dist
