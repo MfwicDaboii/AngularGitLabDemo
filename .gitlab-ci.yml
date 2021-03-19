@@ -26,11 +26,14 @@ stages:
   - docker
 
 setup:
-  image: trion/ng-cli-karma
+  image: cypress/base:latest
   stage: setup
   script:
     - npm ci
-
+    - npx cypress cache path
+    - npx cypress cache list
+    - npx cypress verify
+    - npx cypress info
 
 # #SonarQube: Can only scan one branche when using free version
 # analyse:sonar:
@@ -67,6 +70,7 @@ setup:
 #unit testen
 test:karma:
   stage: test
+  image: trion/ng-cli-karma
   allow_failure: false
   script:
     - npm ci
@@ -85,14 +89,8 @@ test:e2e:
   stage: test
   image: cypress/base:latest
   allow_failure: false
-  before_script:
-    - npm ci
-    - npx cypress cache path
-    - npx cypress cache list
-    - npx cypress verify
-    - npx cypress info
   script:
-  - ng e2e --progress false --watch false --headless
+  - npx cypress run --progress false --watch false --headless
   artifacts:
     when: always
     paths:
@@ -102,28 +100,28 @@ test:e2e:
   tags:
   - docker  
 
-#code coverage for code quality
-test:code-coverage:
-  stage: report
-  image: trion/ng-cli-karma:latest
-  allow_failure: false
-  script:
-    - ng test --code-coverage --progress false --watch false
-  coverage: '/Lines \W+: (\d+\.\d+)%.*/'
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/artifacts/app/coverage/
-  tags:
-    - docker
+# #code coverage for code quality
+# test:code-coverage:
+#   stage: report
+#   image: trion/ng-cli-karma:latest
+#   allow_failure: false
+#   script:
+#     - ng test --code-coverage --progress false --watch false
+#   coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+#   artifacts:
+#     paths:
+#       - $CI_PROJECT_DIR/artifacts/app/coverage/
+#   tags:
+#     - docker
 
-#Angular linter for code smells
-test:nglint:
-  stage: report
-  image: trion/ng-cli:latest
-  script:
-  - ng lint
-  tags:
-  - docker
+# #Angular linter for code smells
+# test:nglint:
+#   stage: report
+#   image: trion/ng-cli:latest
+#   script:
+#   - ng lint
+#   tags:
+#   - docker
 
 #Linter for code smells, bugs and quality 
 lint:sonar:
