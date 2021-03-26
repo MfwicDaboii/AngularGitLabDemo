@@ -126,7 +126,7 @@ setup:
 #Linter for code smells, bugs and quality 
 lint:sonar:
   stage: report
-  image: trion/ng-cli:latest
+  image: sonarqube
   script:
   - npm install -g sonarqube-scanner
   - >
@@ -142,6 +142,8 @@ lint:sonar:
     -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
     -Dsonar.tests=src/app
     -Dsonar.test.inclusions=**/*.spec.ts
+  ports:
+   - 0.0.0.0:9000
 
 build:
   stage: build
