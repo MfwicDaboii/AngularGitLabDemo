@@ -142,7 +142,7 @@ lint:sonar:
     -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
     -Dsonar.tests=src/app
     -Dsonar.test.inclusions=**/*.spec.ts
-  ports:
+  port:
    - 0.0.0.0:9000
 
 build:
